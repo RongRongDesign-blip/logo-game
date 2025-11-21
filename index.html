@@ -2,105 +2,452 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知名 LOGO 猜猜看</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>像素 LOGO 猜猜看</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --primary: #6C5CE7; --secondary: #A29BFE; --background: #F0F3F8; --text: #2D3436; --card-bg: #FFFFFF; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .game-container { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 30px; text-align: center; position: relative; overflow: hidden; }
-        h1 { font-size: 1.5rem; margin-bottom: 10px; color: var(--primary); }
-        .progress { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
-        .clue-box { background: #f9f9f9; border-radius: 15px; padding: 40px 20px; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; border: 2px dashed #ddd; }
-        .clue-icon { font-size: 3rem; margin-bottom: 10px; }
-        .clue-text { font-size: 1.2rem; font-weight: bold; line-height: 1.5; }
-        .palette { display: flex; gap: 10px; }
-        .color-circle { width: 50px; height: 50px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        button.option-btn { background: white; border: 2px solid #eee; border-radius: 12px; padding: 15px; font-size: 1rem; cursor: pointer; transition: all 0.2s ease; color: var(--text); font-weight: 600; }
-        button.option-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
-        .correct { background-color: #00b894 !important; color: white !important; border-color: #00b894 !important; }
-        .wrong { background-color: #d63031 !important; color: white !important; border-color: #d63031 !important; }
-        .hidden { display: none; }
-        .result-screen h2 { font-size: 2rem; margin-bottom: 10px; }
-        .score-display { font-size: 4rem; font-weight: bold; color: var(--primary); margin: 20px 0; }
-        .restart-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 1.2rem; cursor: pointer; margin-top: 20px; }
-        .restart-btn:hover { background: #5649c0; }
+        :root {
+            /* 日系復古像素配色 */
+            --bg-color: #FFF1E8;      /* 米黃背景 */
+            --card-bg: #FFCCAA;       /* 遊戲機身橘粉色 */
+            --screen-bg: #292831;     /* 屏幕深色背景 */
+            --text-color: #292831;    /* 復古深灰字 */
+            --text-light: #FFF1E8;    /* 淺色字 */
+            --accent-blue: #29ADFF;   /* 像素藍 */
+            --accent-red: #FF004D;    /* 像素紅 (錯誤/強調) */
+            --accent-green: #00E756;  /* 像素綠 (正確) */
+            --accent-yellow: #FFA300; /* 像素黃 */
+            --border-color: #000000;  /* 純黑邊框 */
+            --pixel-size: 4px;        /* 基礎像素單位 */
+        }
+
+        * {
+            box-sizing: border-box;
+            /* 禁止手機雙擊縮放 */
+            touch-action: manipulation; 
+        }
+
+        body {
+            font-family: 'DotGothic16', sans-serif; /* 應用像素字體 */
+            background-color: var(--bg-color);
+            /* 添加復古方格背景紋理 */
+            background-image: 
+                linear-gradient(45deg, #FFDEC7 25%, transparent 25%), 
+                linear-gradient(-45deg, #FFDEC7 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #FFDEC7 75%), 
+                linear-gradient(-45deg, transparent 75%, #FFDEC7 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            image-rendering: pixelated; /* 讓圖片呈現像素感 */
+        }
+
+        /* 遊戲主機外殼 */
+        .game-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            /* 像素風格邊框：厚黑邊 + 硬陰影 */
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px rgba(0,0,0,0.5);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            /* 移除圓角，改為直角 */
+            border-radius: 0; 
+        }
+
+        /* 標題 */
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-red);
+            text-shadow: 2px 2px 0px var(--border-color);
+            letter-spacing: 2px;
+        }
+
+        /* 進度條 */
+        .progress {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            background: var(--accent-yellow);
+            display: inline-block;
+            padding: 5px 15px;
+            border: 3px solid var(--border-color);
+            font-weight: bold;
+        }
+
+        /* 線索屏幕區 (模仿 CRT 螢幕) */
+        .clue-box {
+            background: var(--screen-bg);
+            color: var(--text-light);
+            border: var(--pixel-size) solid var(--border-color);
+            /* 內陰影模擬螢幕邊緣 */
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CRT 掃描線效果 (可選，增加復古感) */
+        .clue-box::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .clue-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            /* 給 emoji 加個像素描邊效果 */
+            filter: drop-shadow(3px 3px 0 var(--border-color)); 
+            z-index: 3;
+        }
+
+        .clue-text {
+            font-size: 1.4rem;
+            font-weight: normal;
+            line-height: 1.5;
+            text-shadow: 2px 2px 0px var(--border-color);
+            z-index: 3;
+        }
+
+        /* 提示文字 */
+        .question-prompt {
+            margin-bottom: 15px;
+            font-size: 1rem;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        /* 色票樣式 - 從圓形改為像素方塊 */
+        .palette {
+            display: flex;
+            gap: 15px;
+            z-index: 3;
+        }
+        .color-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 0; /* 變方 */
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.3);
+        }
+
+        /* 選項按鈕區 */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        /* 像素按鈕 */
+        button.option-btn {
+            background: #FFFFFF;
+            border: var(--pixel-size) solid var(--border-color);
+            /* 像素硬陰影 */
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px var(--border-color);
+            border-radius: 0;
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text-color);
+            font-weight: bold;
+            font-family: 'DotGothic16', sans-serif;
+            position: relative;
+            top: 0;
+            left: 0;
+            transition: all 0.1s; /* 快速反應 */
+        }
+
+        /* 按鈕按下效果 */
+        button.option-btn:active, button.option-btn.clicked {
+            top: var(--pixel-size);
+            left: var(--pixel-size);
+            box-shadow: 0px 0px 0px var(--border-color);
+            background-color: #ddd;
+        }
+        
+        /* 電腦版 hover 效果 */
+        @media (hover: hover) {
+            button.option-btn:hover {
+                 background-color: var(--accent-yellow);
+            }
+        }
+
+        /* 答對答錯狀態 */
+        .correct {
+            background-color: var(--accent-green) !important;
+            color: var(--border-color) !important;
+            box-shadow: inset 0 0 0 4px #FFFFFF, var(--pixel-size) var(--pixel-size) 0px var(--border-color) !important;
+        }
+
+        .wrong {
+            background-color: var(--accent-red) !important;
+            color: var(--text-light) !important;
+            box-shadow: inset 0 0 0 4px #FFFFFF, var(--pixel-size) var(--pixel-size) 0px var(--border-color) !important;
+            text-shadow: 1px 1px 0 var(--border-color);
+        }
+        
+        /* 按下後的狀態修正 (移除位移，保持顏色) */
+        button.option-btn.correct:active, button.option-btn.wrong:active {
+             top: 0; left: 0;
+             box-shadow: inset 0 0 0 4px #FFFFFF, var(--pixel-size) var(--pixel-size) 0px var(--border-color) !important;
+        }
+
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 結果畫面 */
+        .result-screen h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-blue);
+            text-shadow: 3px 3px 0 var(--border-color);
+        }
+        .score-display {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--accent-yellow);
+            margin: 20px 0;
+            text-shadow: 4px 4px 0 var(--border-color);
+            font-family: 'Courier New', Courier, monospace; /* 用等寬字體顯示分數更像舊遊戲 */
+        }
+        .restart-btn {
+            background: var(--accent-blue);
+            color: white;
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px var(--border-color);
+            padding: 15px 40px;
+            border-radius: 0;
+            font-size: 1.4rem;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'DotGothic16', sans-serif;
+            text-shadow: 2px 2px 0 var(--border-color);
+        }
+        .restart-btn:active {
+             transform: translate(var(--pixel-size), var(--pixel-size));
+             box-shadow: none;
+        }
+
     </style>
 </head>
 <body>
+
 <div class="game-container" id="game-box">
     <div id="game-header">
-        <h1>🕵️ LOGO 偵探</h1>
-        <div class="progress">題目 <span id="current-q">1</span> / <span id="total-q">5</span></div>
+        <h1>👾 LOGO 大挑戰 👾</h1>
+        <div class="progress">STAGE <span id="current-q">1</span>-<span id="total-q">5</span></div>
     </div>
+
     <div id="question-area">
-        <div class="clue-box" id="clue-display"></div>
-        <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">請問這是哪個品牌？</p>
-        <div class="options-grid" id="options-container"></div>
+        <div class="clue-box" id="clue-display">
+            </div>
+        <p class="question-prompt">這是哪個品牌?</p>
+        <div class="options-grid" id="options-container">
+            </div>
     </div>
+
     <div id="result-area" class="hidden result-screen">
-        <h2>遊戲結束!</h2>
-        <p>你的品牌知識等級是...</p>
-        <div class="score-display"><span id="final-score">0</span> 分</div>
-        <p id="feedback-text">還不錯喔！</p>
-        <button class="restart-btn" onclick="restartGame()">再玩一次</button>
+        <h2>GAME OVER!</h2>
+        <p>你的品牌知識等級...</p>
+        <div class="score-display"><span id="final-score">0</span> PTS</div>
+        <p id="feedback-text" style="font-size: 1.2rem;">還不錯喔！</p>
+        <button class="restart-btn" onclick="restartGame()">PRESS START</button>
     </div>
 </div>
+
 <script>
+    // 題庫設定 (內容維持不變)
     const questions = [
-        { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '經典配色', options: ['肯德基', '麥當勞', '漢堡王', '必勝客'], answer: 1 },
-        { type: 'adjective', clue: '科技、昂貴、極簡、缺了一口', desc: '品牌關鍵字', options: ['Microsoft', 'Samsung', 'Apple', 'Sony'], answer: 2 },
-        { type: 'detail', clue: '🧜‍♀️ 雙尾美人魚', desc: '圖案細節', options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'], answer: 1 },
-        { type: 'color', clue: ['#0051BA', '#FFDA1A'], desc: '來自北歐的配色', options: ['Costco', 'IKEA', 'Walmart', 'Carrefour'], answer: 1 },
-        { type: 'detail', clue: '🚗 四個相扣的圓圈', desc: '形狀細節', options: ['BMW', 'Toyota', 'Audi', 'Benz'], answer: 2 }
+        {
+            type: 'color', 
+            clue: ['#FF0000', '#FFC72C'], // 紅 & 黃
+            desc: '經典配色',
+            options: ['肯德基', '麥當勞', '漢堡王', '必勝客'],
+            answer: 1 
+        },
+        {
+            type: 'adjective',
+            clue: '科技、昂貴、極簡、缺了一口',
+            desc: '品牌關鍵字',
+            options: ['Microsoft', 'Samsung', 'Apple', 'Sony'],
+            answer: 2
+        },
+        {
+            type: 'detail',
+            clue: '🧜‍♀️ 雙尾美人魚',
+            desc: '圖案細節',
+            options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'],
+            answer: 1
+        },
+        {
+            type: 'color',
+            clue: ['#0051BA', '#FFDA1A'], // 藍 & 黃
+            desc: '來自北歐的配色',
+            options: ['Costco', 'IKEA', 'Walmart', 'Carrefour'],
+            answer: 1
+        },
+        {
+            type: 'detail',
+            clue: '🚗 四個相扣的圓圈',
+            desc: '形狀細節',
+            options: ['BMW', 'Toyota', 'Audi', 'Benz'],
+            answer: 2
+        }
     ];
-    let currentQuestionIndex = 0; let score = 0; let canAnswer = true;
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let canAnswer = true;
+
+    // 初始化遊戲
     function initGame() {
-        currentQuestionIndex = 0; score = 0;
+        currentQuestionIndex = 0;
+        score = 0;
         document.getElementById('total-q').innerText = questions.length;
         document.getElementById('game-header').classList.remove('hidden');
         document.getElementById('question-area').classList.remove('hidden');
         document.getElementById('result-area').classList.add('hidden');
         loadQuestion();
     }
+
+    // 載入題目
     function loadQuestion() {
-        canAnswer = true; const q = questions[currentQuestionIndex];
+        canAnswer = true;
+        const q = questions[currentQuestionIndex];
         document.getElementById('current-q').innerText = currentQuestionIndex + 1;
-        const clueBox = document.getElementById('clue-display'); clueBox.innerHTML = '';
+        
+        const clueBox = document.getElementById('clue-display');
+        clueBox.innerHTML = ''; // Clear previous
+
+        // 根據題目類型渲染不同的線索
         if (q.type === 'color') {
-            const paletteDiv = document.createElement('div'); paletteDiv.className = 'palette';
-            q.clue.forEach(color => { let circle = document.createElement('div'); circle.className = 'color-circle'; circle.style.backgroundColor = color; paletteDiv.appendChild(circle); });
-            clueBox.appendChild(paletteDiv); clueBox.innerHTML += `<p style="margin-top:15px; color:#888;">${q.desc}</p>`;
+            const paletteDiv = document.createElement('div');
+            paletteDiv.className = 'palette';
+            q.clue.forEach(color => {
+                let circle = document.createElement('div');
+                circle.className = 'color-circle'; // CSS中已經變方形了
+                circle.style.backgroundColor = color;
+                paletteDiv.appendChild(circle);
+            });
+            clueBox.appendChild(paletteDiv);
+            clueBox.innerHTML += `<p style="margin-top:15px; color: var(--text-light); z-index:3;">${q.desc}</p>`;
         } else {
+            // 文字或細節描述
             let icon = q.type === 'detail' ? '🔍' : '✨';
-            clueBox.innerHTML = `<div class="clue-icon">${icon}</div><div class="clue-text">${q.clue}</div><p style="margin-top:10px; font-size:0.8rem; color:#aaa;">(${q.desc})</p>`;
+            clueBox.innerHTML = `
+                <div class="clue-icon">${icon}</div>
+                <div class="clue-text">${q.clue}</div>
+                <p style="margin-top:10px; font-size:0.9rem; color: #aaa; z-index:3;">[${q.desc}]</p>
+            `;
         }
-        const optionsContainer = document.getElementById('options-container'); optionsContainer.innerHTML = '';
+
+        // 渲染選項按鈕
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
         q.options.forEach((opt, index) => {
-            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
-            btn.onclick = () => checkAnswer(index, btn); optionsContainer.appendChild(btn);
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            // 增加 touchstart 事件以獲得更好的手機點擊回饋
+            btn.addEventListener('touchstart', function(){ this.classList.add('clicked'); });
+            btn.addEventListener('touchend', function(){ this.classList.remove('clicked'); });
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
         });
     }
+
+    // 檢查答案
     function checkAnswer(selectedIndex, btnElement) {
-        if (!canAnswer) return; canAnswer = false;
+        if (!canAnswer) return;
+        canAnswer = false;
+        btnElement.classList.remove('clicked'); // 移除點擊狀態
+
         const correctIndex = questions[currentQuestionIndex].answer;
         const buttons = document.querySelectorAll('.option-btn');
-        if (selectedIndex === correctIndex) { btnElement.classList.add('correct'); score += 20; } 
-        else { btnElement.classList.add('wrong'); buttons[correctIndex].classList.add('correct'); }
-        setTimeout(() => { currentQuestionIndex++; if (currentQuestionIndex < questions.length) loadQuestion(); else showResult(); }, 1000);
+
+        if (selectedIndex === correctIndex) {
+            btnElement.classList.add('correct');
+            score += 20; // 每題20分
+        } else {
+            btnElement.classList.add('wrong');
+            // 顯示正確答案
+            buttons[correctIndex].classList.add('correct');
+        }
+
+        // 延遲進入下一題
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }, 1200); // 稍微延長一點時間看清楚結果
     }
+
+    // 顯示結果
     function showResult() {
         document.getElementById('game-header').classList.add('hidden');
         document.getElementById('question-area').classList.add('hidden');
         document.getElementById('result-area').classList.remove('hidden');
+        
         const finalScoreSpan = document.getElementById('final-score');
         const feedbackText = document.getElementById('feedback-text');
+        
+        // 動畫跑分效果
         let tempScore = 0;
-        const timer = setInterval(() => { if (tempScore >= score) { clearInterval(timer); finalScoreSpan.innerText = score; } else { tempScore++; finalScoreSpan.innerText = tempScore; } }, 20);
-        if (score === 100) feedbackText.innerText = "太強了！你是品牌大師！🏆"; else if (score >= 60) feedbackText.innerText = "還不錯，眼力很好喔！👀"; else feedbackText.innerText = "再接再厲，下次會更好！💪";
+        // 讓跑分快一點，更有電動感
+        const timer = setInterval(() => {
+            if (tempScore >= score) {
+                clearInterval(timer);
+                finalScoreSpan.innerText = score;
+            } else {
+                tempScore+=2; // 一次跳2分
+                if(tempScore > score) tempScore = score;
+                finalScoreSpan.innerText = tempScore;
+            }
+        }, 15);
+
+        // 評語 (加入一點顏文字)
+        if (score === 100) feedbackText.innerText = "太強了！品牌大師！ (≧∇≦)/🏆";
+        else if (score >= 80) feedbackText.innerText = "很厲害喔！眼力超好！ (•̀ᴗ•́)و ̑̑";
+        else if (score >= 60) feedbackText.innerText = "還不錯，及格了！ (´・ω・`)";
+        else feedbackText.innerText = "再接再厲，下次會更好！ (T_T)";
     }
-    function restartGame() { initGame(); }
+
+    function restartGame() {
+        initGame();
+    }
+
+    // 啟動
     initGame();
 </script>
+
 </body>
 </html>
