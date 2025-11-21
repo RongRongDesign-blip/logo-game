@@ -1,101 +1,316 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LOGO大偵探 - 初始介面</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LOGO大偵探</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&family=DotGothic16&display=swap" rel="stylesheet">
+    
     <style>
-        /* 全局樣式與字體 */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'M PLUS Rounded 1c', 'Noto Sans TC', sans-serif;
-            background-color: #f8f5e6; /* 日系米色背景 */
+        :root {
+            /* 遊戲配色 */
+            --bg-color: #FFF1E8;
+            --card-bg: #FFCCAA;
+            --screen-bg: #292831;
+            --text-color: #292831;
+            --text-light: #FFF1E8;
+            --accent-blue: #29ADFF;
+            --accent-red: #FF004D;
+            --accent-green: #00E756;
+            --accent-yellow: #FFA300;
+            --border-color: #000000;
+            --pixel-size: 4px;
+        }
+
+        * { box-sizing: border-box; touch-action: manipulation; }
+
+        body {
+            /* 預設使用圓體，進入遊戲後會局部覆蓋為像素字 */
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: var(--bg-color);
+            /* 背景紋理 */
+            background-image: 
+                linear-gradient(45deg, #FFDEC7 25%, transparent 25%), 
+                linear-gradient(-45deg, #FFDEC7 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #FFDEC7 75%), 
+                linear-gradient(-45deg, transparent 75%, #FFDEC7 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
             overflow: hidden;
         }
 
-        /* 遊戲容器 - 日系簡約背景紋理 */
-        .game-container {
+        /* === 1. 初始畫面樣式 === */
+        #start-screen {
             text-align: center;
-            background-image: radial-gradient(#e0d8c8 1px, transparent 1px);
-            background-size: 20px 20px;
+            background: rgba(255, 255, 255, 0.9);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(92, 64, 51, 0.1);
-            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            animation: float 3s ease-in-out infinite;
         }
 
-        /* LOGO 圖片樣式 */
         .logo-image {
-            max-width: 90%;
+            max-width: 100%;
             height: auto;
-            /* 圖片本身已有貼紙效果，此處不再重複添加 */
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 0 rgba(0,0,0,0.1));
         }
 
-        /* 開始遊戲按鈕樣式 - 日系簡約貼紙風格 */
         .start-button {
             display: inline-block;
-            padding: 15px 40px;
-            font-size: 1.8rem;
+            padding: 15px 50px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #5c4033; /* 深棕色文字 */
-            background-color: #f2a93b; /* LOGO中的橙色 */
-            border: none;
-            border-radius: 30px;
+            color: #5c4033;
+            background-color: var(--accent-yellow);
+            border: 4px solid white;
+            border-radius: 50px;
             cursor: pointer;
-            box-shadow: 
-                0 5px 0 #c78a2f, /* 立體陰影 */
-                0 8px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-            outline: 3px solid #ffffff; /* 白色描邊 */
-        }
-
-        /* 按鈕懸停和點擊效果 */
-        .start-button:hover {
-            transform: translateY(2px);
-            box-shadow: 
-                0 3px 0 #c78a2f,
-                0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 0 #c78a2f, 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
         }
 
         .start-button:active {
-            transform: translateY(5px);
-            box-shadow: 
-                0 0 0 #c78a2f,
-                0 3px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(6px);
+            box-shadow: 0 0 0 #c78a2f, inset 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        /* 響應式設計 */
-        @media (max-width: 600px) {
-            .start-button {
-                font-size: 1.4rem;
-                padding: 12px 30px;
-            }
+        /* === 2. 遊戲本體樣式 (預設隱藏) === */
+        .game-container {
+            display: none; /* 初始隱藏 */
+            font-family: 'DotGothic16', sans-serif; /* 遊戲內改用像素字 */
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px rgba(0,0,0,0.5);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            image-rendering: pixelated;
         }
+
+        /* 標題 */
+        .game-container h1 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent-red);
+            text-shadow: 2px 2px 0px var(--border-color);
+            letter-spacing: 2px;
+        }
+
+        .progress {
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            background: var(--accent-yellow);
+            display: inline-block;
+            padding: 5px 15px;
+            border: 3px solid var(--border-color);
+            font-weight: bold;
+        }
+
+        /* 線索屏幕區 */
+        .clue-box {
+            background: var(--screen-bg);
+            color: var(--text-light);
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); 
+            padding: 30px 20px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CRT 掃描線 */
+        .clue-box::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            pointer-events: none;
+            background-size: 100% 4px, 3px 100%;
+        }
+
+        .clue-icon { font-size: 3.5rem; margin-bottom: 15px; filter: drop-shadow(3px 3px 0 var(--border-color)); z-index: 3; }
+        .clue-text { font-size: 1.4rem; font-weight: normal; z-index: 3; }
+        .palette { display: flex; gap: 15px; z-index: 3; }
+        .color-circle { width: 50px; height: 50px; border: var(--pixel-size) solid var(--border-color); box-shadow: 3px 3px 0px rgba(0,0,0,0.3); }
+
+        /* 選項按鈕區 */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        button.option-btn {
+            background: #FFFFFF;
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px var(--border-color);
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: var(--text-color);
+            font-weight: bold;
+            font-family: 'DotGothic16', sans-serif;
+            position: relative;
+        }
+        
+        button.option-btn:active, button.option-btn.clicked {
+            top: var(--pixel-size); left: var(--pixel-size);
+            box-shadow: none; background-color: #ddd;
+        }
+
+        .correct { background-color: var(--accent-green) !important; color: var(--border-color) !important; }
+        .wrong { background-color: var(--accent-red) !important; color: white !important; }
+        
+        .hidden { display: none !important; }
+
+        .score-display { font-size: 4rem; color: var(--accent-yellow); margin: 20px 0; text-shadow: 4px 4px 0 var(--border-color); font-family: 'Courier New', monospace; }
+        
+        .restart-btn {
+            background: var(--accent-blue); color: white;
+            border: var(--pixel-size) solid var(--border-color);
+            box-shadow: var(--pixel-size) var(--pixel-size) 0px var(--border-color);
+            padding: 15px 40px; font-size: 1.2rem; cursor: pointer; margin-top: 20px;
+            font-family: 'DotGothic16', sans-serif;
+        }
+        .restart-btn:active { transform: translate(var(--pixel-size), var(--pixel-size)); box-shadow: none; }
+
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="game-container">
+    <div id="start-screen">
         <img src="image_8.png" alt="LOGO大偵探" class="logo-image">
-        
+        <br>
         <button class="start-button" onclick="startGame()">開始遊戲</button>
     </div>
 
-    <script>
-        // 遊戲開始函式
-        function startGame() {
-            // 這裡可以添加跳轉到遊戲主畫面的邏輯
-            // 例如: window.location.href = 'game.html';
-            alert('遊戲開始！(此處應跳轉至遊戲主畫面)');
-        }
-    </script>
+    <div class="game-container" id="game-box">
+        <div id="game-header">
+            <h1>👾 LOGO 挑戰賽 👾</h1>
+            <div class="progress">STAGE <span id="current-q">1</span>-<span id="total-q">5</span></div>
+        </div>
 
-</body>
-</html>
+        <div id="question-area">
+            <div class="clue-box" id="clue-display"></div>
+            <p style="margin-bottom: 15px;">這是哪個品牌?</p>
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <div id="result-area" class="hidden result-screen">
+            <h2>GAME OVER!</h2>
+            <p>你的品牌知識等級...</p>
+            <div class="score-display"><span id="final-score">0</span> PTS</div>
+            <p id="feedback-text">還不錯喔！</p>
+            <button class="restart-btn" onclick="restartGame()">PRESS START</button>
+        </div>
+    </div>
+
+<script>
+    // === 遊戲邏輯開始 ===
+
+    // 切換畫面函數
+    function startGame() {
+        // 隱藏初始畫面
+        document.getElementById('start-screen').style.display = 'none';
+        // 顯示遊戲畫面 (block)
+        document.getElementById('game-box').style.display = 'block';
+        // 確保遊戲重置並開始
+        initGame();
+    }
+
+    const questions = [
+        { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '經典配色', options: ['肯德基', '麥當勞', '漢堡王', '必勝客'], answer: 1 },
+        { type: 'adjective', clue: '科技、昂貴、極簡、缺了一口', desc: '品牌關鍵字', options: ['Microsoft', 'Samsung', 'Apple', 'Sony'], answer: 2 },
+        { type: 'detail', clue: '🧜‍♀️ 雙尾美人魚', desc: '圖案細節', options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'], answer: 1 },
+        { type: 'color', clue: ['#0051BA', '#FFDA1A'], desc: '來自北歐的配色', options: ['Costco', 'IKEA', 'Walmart', 'Carrefour'], answer: 1 },
+        { type: 'detail', clue: '🚗 四個相扣的圓圈', desc: '形狀細節', options: ['BMW', 'Toyota', 'Audi', 'Benz'], answer: 2 }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let canAnswer = true;
+
+    function initGame() {
+        currentQuestionIndex = 0;
+        score = 0;
+        document.getElementById('total-q').innerText = questions.length;
+        document.getElementById('game-header').classList.remove('hidden');
+        document.getElementById('question-area').classList.remove('hidden');
+        document.getElementById('result-area').classList.add('hidden');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        canAnswer = true;
+        const q = questions[currentQuestionIndex];
+        document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+        const clueBox = document.getElementById('clue-display');
+        clueBox.innerHTML = ''; 
+
+        if (q.type === 'color') {
+            const paletteDiv = document.createElement('div');
+            paletteDiv.className = 'palette';
+            q.clue.forEach(color => {
+                let circle = document.createElement('div');
+                circle.className = 'color-circle';
+                circle.style.backgroundColor = color;
+                paletteDiv.appendChild(circle);
+            });
+            clueBox.appendChild(paletteDiv);
+            clueBox.innerHTML += `<p style="margin-top:15px; z-index:3;">${q.desc}</p>`;
+        } else {
+            let icon = q.type === 'detail' ? '🔍' : '✨';
+            clueBox.innerHTML = `<div class="clue-icon">${icon}</div><div class="clue-text">${q.clue}</div><p style="margin-top:10px; font-size:0.9rem; color: #aaa; z-index:3;">[${q.desc}]</p>`;
+        }
+
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.addEventListener('touchstart', function(){ this.classList.add('clicked'); });
+            btn.addEventListener('touchend', function(){ this.classList.remove('clicked'); });
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        if (!canAnswer) return;
+        canAnswer = false;
+        btnElement.classList.remove('clicked');
+        const correctIndex = questions[currentQuestionIndex].answer;
+        const buttons = document.querySelectorAll('.option-btn');
+
+        if (selectedIndex === correctIndex) {
+            btnElement.classList.add('correct');
+            score += 20; 
+        } else {
+            btnElement.classList.add('wrong');
+            buttons[correctIndex].classList.add('correct');
+        }
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (
