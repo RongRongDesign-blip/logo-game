@@ -1,361 +1,106 @@
-{\rtf1\ansi\ansicpg950\cocoartf2758
-\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-{\*\expandedcolortbl;;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
-\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-
-\f0\fs24 \cf0 <!DOCTYPE html>\
-<html lang="zh-TW">\
-<head>\
-    <meta charset="UTF-8">\
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
-    <title>\uc0\u30693 \u21517  LOGO \u29468 \u29468 \u30475 </title>\
-    <style>\
-        :root \{\
-            --primary: #6C5CE7;\
-            --secondary: #A29BFE;\
-            --background: #F0F3F8;\
-            --text: #2D3436;\
-            --card-bg: #FFFFFF;\
-        \}\
-\
-        body \{\
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\
-            background-color: var(--background);\
-            color: var(--text);\
-            display: flex;\
-            justify-content: center;\
-            align-items: center;\
-            min-height: 100vh;\
-            margin: 0;\
-            padding: 20px;\
-        \}\
-\
-        .game-container \{\
-            background: var(--card-bg);\
-            width: 100%;\
-            max-width: 500px;\
-            border-radius: 20px;\
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);\
-            padding: 30px;\
-            text-align: center;\
-            position: relative;\
-            overflow: hidden;\
-        \}\
-\
-        h1 \{\
-            font-size: 1.5rem;\
-            margin-bottom: 10px;\
-            color: var(--primary);\
-        \}\
-\
-        .progress \{\
-            font-size: 0.9rem;\
-            color: #aaa;\
-            margin-bottom: 20px;\
-        \}\
-\
-        /* Clue Area Styling */\
-        .clue-box \{\
-            background: #f9f9f9;\
-            border-radius: 15px;\
-            padding: 40px 20px;\
-            margin-bottom: 25px;\
-            display: flex;\
-            flex-direction: column;\
-            align-items: center;\
-            justify-content: center;\
-            min-height: 150px;\
-            border: 2px dashed #ddd;\
-        \}\
-\
-        .clue-icon \{\
-            font-size: 3rem;\
-            margin-bottom: 10px;\
-        \}\
-\
-        .clue-text \{\
-            font-size: 1.2rem;\
-            font-weight: bold;\
-            line-height: 1.5;\
-        \}\
-\
-        /* Color Palette Style */\
-        .palette \{\
-            display: flex;\
-            gap: 10px;\
-        \}\
-        .color-circle \{\
-            width: 50px;\
-            height: 50px;\
-            border-radius: 50%;\
-            border: 3px solid white;\
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);\
-        \}\
-\
-        /* Options Grid */\
-        .options-grid \{\
-            display: grid;\
-            grid-template-columns: 1fr 1fr;\
-            gap: 15px;\
-        \}\
-\
-        button.option-btn \{\
-            background: white;\
-            border: 2px solid #eee;\
-            border-radius: 12px;\
-            padding: 15px;\
-            font-size: 1rem;\
-            cursor: pointer;\
-            transition: all 0.2s ease;\
-            color: var(--text);\
-            font-weight: 600;\
-        \}\
-\
-        button.option-btn:hover \{\
-            border-color: var(--primary);\
-            color: var(--primary);\
-            transform: translateY(-2px);\
-        \}\
-\
-        /* States */\
-        .correct \{\
-            background-color: #00b894 !important;\
-            color: white !important;\
-            border-color: #00b894 !important;\
-        \}\
-\
-        .wrong \{\
-            background-color: #d63031 !important;\
-            color: white !important;\
-            border-color: #d63031 !important;\
-        \}\
-\
-        .hidden \{\
-            display: none;\
-        \}\
-\
-        /* Result Screen */\
-        .result-screen h2 \{\
-            font-size: 2rem;\
-            margin-bottom: 10px;\
-        \}\
-        .score-display \{\
-            font-size: 4rem;\
-            font-weight: bold;\
-            color: var(--primary);\
-            margin: 20px 0;\
-        \}\
-        .restart-btn \{\
-            background: var(--primary);\
-            color: white;\
-            border: none;\
-            padding: 15px 40px;\
-            border-radius: 30px;\
-            font-size: 1.2rem;\
-            cursor: pointer;\
-            margin-top: 20px;\
-        \}\
-        .restart-btn:hover \{\
-            background: #5649c0;\
-        \}\
-\
-    </style>\
-</head>\
-<body>\
-\
-<div class="game-container" id="game-box">\
-    <div id="game-header">\
-        <h1>\uc0\u55357 \u56693 \u65039  LOGO \u20597 \u25506 </h1>\
-        <div class="progress">\uc0\u38988 \u30446  <span id="current-q">1</span> / <span id="total-q">5</span></div>\
-    </div>\
-\
-    <div id="question-area">\
-        <div class="clue-box" id="clue-display">\
-            </div>\
-        <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">\uc0\u35531 \u21839 \u36889 \u26159 \u21738 \u20491 \u21697 \u29260 \u65311 </p>\
-        <div class="options-grid" id="options-container">\
-            </div>\
-    </div>\
-\
-    <div id="result-area" class="hidden result-screen">\
-        <h2>\uc0\u36938 \u25138 \u32080 \u26463 !</h2>\
-        <p>\uc0\u20320 \u30340 \u21697 \u29260 \u30693 \u35672 \u31561 \u32026 \u26159 ...</p>\
-        <div class="score-display"><span id="final-score">0</span> \uc0\u20998 </div>\
-        <p id="feedback-text">\uc0\u36996 \u19981 \u37679 \u21908 \u65281 </p>\
-        <button class="restart-btn" onclick="restartGame()">\uc0\u20877 \u29609 \u19968 \u27425 </button>\
-    </div>\
-</div>\
-\
-<script>\
-    // \uc0\u38988 \u24235 \u35373 \u23450 \
-    const questions = [\
-        \{\
-            type: 'color', \
-            clue: ['#FF0000', '#FFC72C'], // \uc0\u32005  & \u40643 \
-            desc: '\uc0\u32147 \u20856 \u37197 \u33394 ',\
-            options: ['\uc0\u32943 \u24503 \u22522 ', '\u40613 \u30070 \u21214 ', '\u28450 \u22561 \u29579 ', '\u24517 \u21213 \u23458 '],\
-            answer: 1 // Index of correct answer\
-        \},\
-        \{\
-            type: 'adjective',\
-            clue: '\uc0\u31185 \u25216 \u12289 \u26114 \u36020 \u12289 \u26997 \u31777 \u12289 \u32570 \u20102 \u19968 \u21475 ',\
-            desc: '\uc0\u21697 \u29260 \u38364 \u37749 \u23383 ',\
-            options: ['Microsoft', 'Samsung', 'Apple', 'Sony'],\
-            answer: 2\
-        \},\
-        \{\
-            type: 'detail',\
-            clue: '\uc0\u55358 \u56796 \u8205 \u9792 \u65039  \u38617 \u23614 \u32654 \u20154 \u39770 ',\
-            desc: '\uc0\u22294 \u26696 \u32048 \u31680 ',\
-            options: ['\uc0\u36335 \u26131 \u33678 ', '\u26143 \u24052 \u20811 ', '85\u24230 C', '\u20271 \u26391 \u21654 \u21857 '],\
-            answer: 1\
-        \},\
-        \{\
-            type: 'color',\
-            clue: ['#0099FF', '#FFFFFF'], // \uc0\u34253  & \u30333 \
-            desc: '\uc0\u36889 \u26159 \u19968 \u20491 \u31038 \u32676 \u36575 \u39636 ',\
-            options: ['Facebook', 'Twitter', 'LinkedIn', 'Skype'],\
-            answer: 3 // \uc0\u20551 \u35373 \u36889 \u26159 \u33290 \u29256 Twitter\u25110 Skype\u65292 \u36889 \u35041 \u35373 \u23450 \u28858  Skype (\u34253 \u33394 \u31995 \u22810 ) -> \u20462 \u27491 \u65306 \u25913 \u28858 \u26126 \u30906 \u30340  IKEA \u22909 \u20102 \u65292 \u27604 \u36611 \u22909 \u29468 \
-        \}, \
-        \{\
-            // \uc0\u20462 \u27491 \u31532 4\u38988 \u28858 \u26356 \u26126 \u30906 \u30340  IKEA\
-            type: 'color',\
-            clue: ['#0051BA', '#FFDA1A'], // \uc0\u34253  & \u40643 \
-            desc: '\uc0\u20358 \u33258 \u21271 \u27472 \u30340 \u37197 \u33394 ',\
-            options: ['Costco', 'IKEA', 'Walmart', 'Carrefour'],\
-            answer: 1\
-        \},\
-        \{\
-            type: 'detail',\
-            clue: '\uc0\u55357 \u56983  \u22235 \u20491 \u30456 \u25187 \u30340 \u22291 \u22280 ',\
-            desc: '\uc0\u24418 \u29376 \u32048 \u31680 ',\
-            options: ['BMW', 'Toyota', 'Audi', 'Benz'],\
-            answer: 2\
-        \}\
-    ];\
-\
-    let currentQuestionIndex = 0;\
-    let score = 0;\
-    let canAnswer = true;\
-\
-    // \uc0\u21021 \u22987 \u21270 \u36938 \u25138 \
-    function initGame() \{\
-        currentQuestionIndex = 0;\
-        score = 0;\
-        document.getElementById('total-q').innerText = questions.length;\
-        document.getElementById('game-header').classList.remove('hidden');\
-        document.getElementById('question-area').classList.remove('hidden');\
-        document.getElementById('result-area').classList.add('hidden');\
-        loadQuestion();\
-    \}\
-\
-    // \uc0\u36617 \u20837 \u38988 \u30446 \
-    function loadQuestion() \{\
-        canAnswer = true;\
-        const q = questions[currentQuestionIndex];\
-        document.getElementById('current-q').innerText = currentQuestionIndex + 1;\
-        \
-        const clueBox = document.getElementById('clue-display');\
-        clueBox.innerHTML = ''; // Clear previous\
-\
-        // \uc0\u26681 \u25818 \u38988 \u30446 \u39006 \u22411 \u28210 \u26579 \u19981 \u21516 \u30340 \u32218 \u32034 \
-        if (q.type === 'color') \{\
-            const paletteDiv = document.createElement('div');\
-            paletteDiv.className = 'palette';\
-            q.clue.forEach(color => \{\
-                let circle = document.createElement('div');\
-                circle.className = 'color-circle';\
-                circle.style.backgroundColor = color;\
-                paletteDiv.appendChild(circle);\
-            \});\
-            clueBox.appendChild(paletteDiv);\
-            clueBox.innerHTML += `<p style="margin-top:15px; color:#888;">$\{q.desc\}</p>`;\
-        \} else \{\
-            // \uc0\u25991 \u23383 \u25110 \u32048 \u31680 \u25551 \u36848 \
-            let icon = q.type === 'detail' ? '\uc0\u55357 \u56589 ' : '\u10024 ';\
-            clueBox.innerHTML = `\
-                <div class="clue-icon">$\{icon\}</div>\
-                <div class="clue-text">$\{q.clue\}</div>\
-                <p style="margin-top:10px; font-size:0.8rem; color:#aaa;">($\{q.desc\})</p>\
-            `;\
-        \}\
-\
-        // \uc0\u28210 \u26579 \u36984 \u38917 \u25353 \u37397 \
-        const optionsContainer = document.getElementById('options-container');\
-        optionsContainer.innerHTML = '';\
-        q.options.forEach((opt, index) => \{\
-            const btn = document.createElement('button');\
-            btn.className = 'option-btn';\
-            btn.innerText = opt;\
-            btn.onclick = () => checkAnswer(index, btn);\
-            optionsContainer.appendChild(btn);\
-        \});\
-    \}\
-\
-    // \uc0\u27298 \u26597 \u31572 \u26696 \
-    function checkAnswer(selectedIndex, btnElement) \{\
-        if (!canAnswer) return;\
-        canAnswer = false;\
-\
-        const correctIndex = questions[currentQuestionIndex].answer;\
-        const buttons = document.querySelectorAll('.option-btn');\
-\
-        if (selectedIndex === correctIndex) \{\
-            btnElement.classList.add('correct');\
-            score += 20; // \uc0\u27599 \u38988 20\u20998 \
-        \} else \{\
-            btnElement.classList.add('wrong');\
-            // \uc0\u39023 \u31034 \u27491 \u30906 \u31572 \u26696 \
-            buttons[correctIndex].classList.add('correct');\
-        \}\
-\
-        // \uc0\u24310 \u36978 \u36914 \u20837 \u19979 \u19968 \u38988 \
-        setTimeout(() => \{\
-            currentQuestionIndex++;\
-            if (currentQuestionIndex < questions.length) \{\
-                loadQuestion();\
-            \} else \{\
-                showResult();\
-            \}\
-        \}, 1000);\
-    \}\
-\
-    // \uc0\u39023 \u31034 \u32080 \u26524 \
-    function showResult() \{\
-        document.getElementById('game-header').classList.add('hidden');\
-        document.getElementById('question-area').classList.add('hidden');\
-        document.getElementById('result-area').classList.remove('hidden');\
-        \
-        const finalScoreSpan = document.getElementById('final-score');\
-        const feedbackText = document.getElementById('feedback-text');\
-        \
-        // \uc0\u21205 \u30059 \u36305 \u20998 \u25928 \u26524 \
-        let tempScore = 0;\
-        const timer = setInterval(() => \{\
-            if (tempScore >= score) \{\
-                clearInterval(timer);\
-                finalScoreSpan.innerText = score;\
-            \} else \{\
-                tempScore++;\
-                finalScoreSpan.innerText = tempScore;\
-            \}\
-        \}, 20);\
-\
-        // \uc0\u35413 \u35486 \
-        if (score === 100) feedbackText.innerText = "\uc0\u22826 \u24375 \u20102 \u65281 \u20320 \u26159 \u21697 \u29260 \u22823 \u24107 \u65281 \u55356 \u57286 ";\
-        else if (score >= 60) feedbackText.innerText = "\uc0\u36996 \u19981 \u37679 \u65292 \u30524 \u21147 \u24456 \u22909 \u21908 \u65281 \u55357 \u56384 ";\
-        else feedbackText.innerText = "\uc0\u20877 \u25509 \u20877 \u21426 \u65292 \u19979 \u27425 \u26371 \u26356 \u22909 \u65281 \u55357 \u56490 ";\
-    \}\
-\
-    function restartGame() \{\
-        initGame();\
-    \}\
-\
-    // \uc0\u21855 \u21205 \
-    initGame();\
-</script>\
-\
-</body>\
-</html>}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>知名 LOGO 猜猜看</title>
+    <style>
+        :root { --primary: #6C5CE7; --secondary: #A29BFE; --background: #F0F3F8; --text: #2D3436; --card-bg: #FFFFFF; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--background); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .game-container { background: var(--card-bg); width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 30px; text-align: center; position: relative; overflow: hidden; }
+        h1 { font-size: 1.5rem; margin-bottom: 10px; color: var(--primary); }
+        .progress { font-size: 0.9rem; color: #aaa; margin-bottom: 20px; }
+        .clue-box { background: #f9f9f9; border-radius: 15px; padding: 40px 20px; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; border: 2px dashed #ddd; }
+        .clue-icon { font-size: 3rem; margin-bottom: 10px; }
+        .clue-text { font-size: 1.2rem; font-weight: bold; line-height: 1.5; }
+        .palette { display: flex; gap: 10px; }
+        .color-circle { width: 50px; height: 50px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        button.option-btn { background: white; border: 2px solid #eee; border-radius: 12px; padding: 15px; font-size: 1rem; cursor: pointer; transition: all 0.2s ease; color: var(--text); font-weight: 600; }
+        button.option-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); }
+        .correct { background-color: #00b894 !important; color: white !important; border-color: #00b894 !important; }
+        .wrong { background-color: #d63031 !important; color: white !important; border-color: #d63031 !important; }
+        .hidden { display: none; }
+        .result-screen h2 { font-size: 2rem; margin-bottom: 10px; }
+        .score-display { font-size: 4rem; font-weight: bold; color: var(--primary); margin: 20px 0; }
+        .restart-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 1.2rem; cursor: pointer; margin-top: 20px; }
+        .restart-btn:hover { background: #5649c0; }
+    </style>
+</head>
+<body>
+<div class="game-container" id="game-box">
+    <div id="game-header">
+        <h1>🕵️ LOGO 偵探</h1>
+        <div class="progress">題目 <span id="current-q">1</span> / <span id="total-q">5</span></div>
+    </div>
+    <div id="question-area">
+        <div class="clue-box" id="clue-display"></div>
+        <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666;">請問這是哪個品牌？</p>
+        <div class="options-grid" id="options-container"></div>
+    </div>
+    <div id="result-area" class="hidden result-screen">
+        <h2>遊戲結束!</h2>
+        <p>你的品牌知識等級是...</p>
+        <div class="score-display"><span id="final-score">0</span> 分</div>
+        <p id="feedback-text">還不錯喔！</p>
+        <button class="restart-btn" onclick="restartGame()">再玩一次</button>
+    </div>
+</div>
+<script>
+    const questions = [
+        { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '經典配色', options: ['肯德基', '麥當勞', '漢堡王', '必勝客'], answer: 1 },
+        { type: 'adjective', clue: '科技、昂貴、極簡、缺了一口', desc: '品牌關鍵字', options: ['Microsoft', 'Samsung', 'Apple', 'Sony'], answer: 2 },
+        { type: 'detail', clue: '🧜‍♀️ 雙尾美人魚', desc: '圖案細節', options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'], answer: 1 },
+        { type: 'color', clue: ['#0051BA', '#FFDA1A'], desc: '來自北歐的配色', options: ['Costco', 'IKEA', 'Walmart', 'Carrefour'], answer: 1 },
+        { type: 'detail', clue: '🚗 四個相扣的圓圈', desc: '形狀細節', options: ['BMW', 'Toyota', 'Audi', 'Benz'], answer: 2 }
+    ];
+    let currentQuestionIndex = 0; let score = 0; let canAnswer = true;
+    function initGame() {
+        currentQuestionIndex = 0; score = 0;
+        document.getElementById('total-q').innerText = questions.length;
+        document.getElementById('game-header').classList.remove('hidden');
+        document.getElementById('question-area').classList.remove('hidden');
+        document.getElementById('result-area').classList.add('hidden');
+        loadQuestion();
+    }
+    function loadQuestion() {
+        canAnswer = true; const q = questions[currentQuestionIndex];
+        document.getElementById('current-q').innerText = currentQuestionIndex + 1;
+        const clueBox = document.getElementById('clue-display'); clueBox.innerHTML = '';
+        if (q.type === 'color') {
+            const paletteDiv = document.createElement('div'); paletteDiv.className = 'palette';
+            q.clue.forEach(color => { let circle = document.createElement('div'); circle.className = 'color-circle'; circle.style.backgroundColor = color; paletteDiv.appendChild(circle); });
+            clueBox.appendChild(paletteDiv); clueBox.innerHTML += `<p style="margin-top:15px; color:#888;">${q.desc}</p>`;
+        } else {
+            let icon = q.type === 'detail' ? '🔍' : '✨';
+            clueBox.innerHTML = `<div class="clue-icon">${icon}</div><div class="clue-text">${q.clue}</div><p style="margin-top:10px; font-size:0.8rem; color:#aaa;">(${q.desc})</p>`;
+        }
+        const optionsContainer = document.getElementById('options-container'); optionsContainer.innerHTML = '';
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button'); btn.className = 'option-btn'; btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index, btn); optionsContainer.appendChild(btn);
+        });
+    }
+    function checkAnswer(selectedIndex, btnElement) {
+        if (!canAnswer) return; canAnswer = false;
+        const correctIndex = questions[currentQuestionIndex].answer;
+        const buttons = document.querySelectorAll('.option-btn');
+        if (selectedIndex === correctIndex) { btnElement.classList.add('correct'); score += 20; } 
+        else { btnElement.classList.add('wrong'); buttons[correctIndex].classList.add('correct'); }
+        setTimeout(() => { currentQuestionIndex++; if (currentQuestionIndex < questions.length) loadQuestion(); else showResult(); }, 1000);
+    }
+    function showResult() {
+        document.getElementById('game-header').classList.add('hidden');
+        document.getElementById('question-area').classList.add('hidden');
+        document.getElementById('result-area').classList.remove('hidden');
+        const finalScoreSpan = document.getElementById('final-score');
+        const feedbackText = document.getElementById('feedback-text');
+        let tempScore = 0;
+        const timer = setInterval(() => { if (tempScore >= score) { clearInterval(timer); finalScoreSpan.innerText = score; } else { tempScore++; finalScoreSpan.innerText = tempScore; } }, 20);
+        if (score === 100) feedbackText.innerText = "太強了！你是品牌大師！🏆"; else if (score >= 60) feedbackText.innerText = "還不錯，眼力很好喔！👀"; else feedbackText.innerText = "再接再厲，下次會更好！💪";
+    }
+    function restartGame() { initGame(); }
+    initGame();
+</script>
+</body>
+</html>
