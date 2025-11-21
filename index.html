@@ -313,4 +313,41 @@
 
         setTimeout(() => {
             currentQuestionIndex++;
-            if (
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }, 1200);
+    }
+
+    function showResult() {
+        document.getElementById('game-header').classList.add('hidden');
+        document.getElementById('question-area').classList.add('hidden');
+        document.getElementById('result-area').classList.remove('hidden');
+        const finalScoreSpan = document.getElementById('final-score');
+        const feedbackText = document.getElementById('feedback-text');
+        let tempScore = 0;
+        const timer = setInterval(() => {
+            if (tempScore >= score) {
+                clearInterval(timer);
+                finalScoreSpan.innerText = score;
+            } else {
+                tempScore+=2; 
+                if(tempScore > score) tempScore = score;
+                finalScoreSpan.innerText = tempScore;
+            }
+        }, 15);
+        if (score === 100) feedbackText.innerText = "太強了！品牌大師！ (≧∇≦)/🏆";
+        else if (score >= 80) feedbackText.innerText = "很厲害喔！眼力超好！ (•̀ᴗ•́)و ̑̑";
+        else if (score >= 60) feedbackText.innerText = "還不錯，及格了！ (´・ω・`)";
+        else feedbackText.innerText = "再接再厲，下次會更好！ (T_T)";
+    }
+
+    function restartGame() {
+        initGame();
+    }
+</script>
+
+</body>
+</html>
