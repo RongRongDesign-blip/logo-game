@@ -168,6 +168,11 @@
             font-family: 'M PLUS Rounded 1c', sans-serif;
             box-shadow: 0 4px 0 #ded5c0; transition: all 0.1s;
             position: relative; top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 60px;
+            line-height: 1.2;
         }
 
         button.option-btn:active { top: 4px; box-shadow: 0 0 0 #ded5c0; }
@@ -216,7 +221,7 @@
         <button class="level-btn lv2" onclick="startLevel(2)">
             <span class="level-icon">🇹🇼</span>
             LEVEL 2
-            <span class="level-desc">台灣限定：在地梗大考驗 (20題)</span>
+            <span class="level-desc">台灣限定：超難在地陷阱題 (20題)</span>
         </button>
     </div>
 
@@ -242,9 +247,9 @@
     </div>
 
 <script>
-    // === 完整題庫資料 (各20題) ===
+    // === 完整題庫資料 ===
     const levelData = {
-        1: [ // LEVEL 1: 新手村
+        1: [ // LEVEL 1: 新手村 (全球品牌 - 標準難度)
             { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '經典配色', options: ['麥當勞', '漢堡王', '肯德基', '摩斯'], answer: 0 },
             { type: 'adjective', clue: '科技、昂貴、極簡、缺了一口', desc: '品牌關鍵字', options: ['Microsoft', 'Samsung', 'Apple', 'Sony'], answer: 2 },
             { type: 'detail', clue: '🧜‍♀️ 雙尾美人魚', desc: '圖案細節', options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'], answer: 1 },
@@ -266,27 +271,27 @@
             { type: 'detail', clue: '🎮 △○×□', desc: '遊戲主機', options: ['Xbox', 'Nintendo', 'PlayStation', 'Steam'], answer: 2 },
             { type: 'detail', clue: '🧔🏻‍♂️ 翹鬍子洋芋片', desc: '零食品牌', options: ['Lay\'s', 'Pringles', 'Doritos', 'Cheetos'], answer: 1 }
         ],
-        2: [ // LEVEL 2: 台灣限定
-            { type: 'color', clue: ['#FFF200', '#005596'], desc: '這杯手搖飲的配色 (黃/藍)', options: ['清心福全', '50嵐', '可不可', '迷客夏'], answer: 1 },
-            { type: 'adjective', clue: '小籠包、排隊、黃金18摺', desc: '台灣美食之光', options: ['四海遊龍', '八方雲集', '鼎泰豐', '點水樓'], answer: 2 },
-            { type: 'detail', clue: '🦁 Open將 (外星人)', desc: '這隻吉祥物屬於?', options: ['全家', 'OK超商', '萊爾富', '7-Eleven'], answer: 3 },
-            { type: 'adjective', clue: '良心、小泡芙、牛奶糖', desc: '從小吃到大的食品廠', options: ['義美', '味全', '光泉', '統一'], answer: 0 },
-            { type: 'color', clue: ['#F39800', '#E60012'], desc: '藥妝店的配色 (橘/紅)', options: ['屈臣氏', '寶雅', '康是美', '日藥本舖'], answer: 2 },
-            { type: 'adjective', clue: '福利熊、熊福利', desc: '請支援收銀', options: ['家樂福', '大潤發', '愛買', '全聯'], answer: 3 },
-            { type: 'color', clue: ['#008852', '#FFFFFF'], desc: '機器運轉順暢必備', options: ['乖乖', '孔雀香酥脆', '可樂果', '科學麵'], answer: 0 },
-            { type: 'detail', clue: '🔥 火炬 (紅白藍)', desc: '加油要加這一家', options: ['台塑化', '台灣中油', '全國加油站', '台亞'], answer: 1 },
-            { type: 'color', clue: ['#EE4D2D', '#FFFFFF'], desc: '橘色購物袋', options: ['PChome', 'Momo', '蝦皮 (Shopee)', 'Yahoo'], answer: 2 },
-            { type: 'adjective', clue: 'We are family', desc: '銀行Slogan', options: ['國泰世華', '富邦金控', '台新銀行', '中國信託'], answer: 3 },
-            { type: 'detail', clue: '👶🏻 大寶寶、電鍋', desc: '超復古家電品牌', options: ['聲寶', '大同', '東元', '歌林'], answer: 1 },
-            { type: 'color', clue: ['#EC008C', '#FFFFFF'], desc: '粉紅色的生活百貨', options: ['寶雅', '美華泰', '四季', '光南'], answer: 0 },
-            { type: 'detail', clue: '🐦 紅色鴿子', desc: '負責送信的', options: ['黑貓宅急便', '順豐', '中華郵政', '新竹物流'], answer: 2 },
-            { type: 'detail', clue: '🐈‍⬛ 黑貓叼著小貓', desc: '宅配公司', options: ['宅配通', '黑貓宅急便', '嘉里大榮', 'Lalamove'], answer: 1 },
-            { type: 'adjective', clue: '不用換電池、安靜', desc: '台灣電動機車', options: ['Kymco', 'Yamaha', 'Gogoro', 'Sym'], answer: 2 },
-            { type: 'color', clue: ['#00A0E9', '#FFFFFF'], desc: '大學生都用的論壇 (藍色)', options: ['PTT', 'Dcard', 'Mobile01', '巴哈姆特'], answer: 1 },
-            { type: 'detail', clue: '🍵 綠色招牌、咖啡、輕食', desc: '台灣本土咖啡龍頭', options: ['Cama', '85度C', '路易莎 (Louisa)', '星巴克'], answer: 2 },
-            { type: 'adjective', clue: '頂級超市、很貴、進口貨', desc: '貴婦逛的', options: ['Mia C\'bon', '全聯', '美廉社', '小北百貨'], answer: 0 },
-            { type: 'color', clue: ['#E60012', '#FFFFFF'], desc: '這家百貨公司也是紅色的', options: ['SOGO', '新光三越', '遠東百貨', '微風'], answer: 1 },
-            { type: 'detail', clue: '🚄 橘色與白色流線', desc: '台灣西部最重要的交通', options: ['台鐵', '捷運', '台灣高鐵', '客運'], answer: 2 }
+        2: [ // LEVEL 2: 台灣限定 (陷阱多、提示少)
+            { type: 'color', clue: ['#FFF200', '#005596'], desc: '黃藍配色的飲料店', options: ['IKEA', '50嵐', '小小兵', '瑞典國旗'], answer: 1 },
+            { type: 'adjective', clue: '18摺', desc: '小籠包', options: ['四海遊龍', '鼎泰豐', '肉包包', '摺紙藝術'], answer: 1 },
+            { type: 'detail', clue: '🦁 Open將', desc: '誰家的吉祥物?', options: ['全家', '7-Eleven', '動物園', '統一獅'], answer: 1 },
+            { type: 'color', clue: ['#008852', '#FFFFFF'], desc: '工程師的守護神', options: ['綠油精', '乖乖', '海尼根', '青箭口香糖'], answer: 1 },
+            { type: 'adjective', clue: '福利熊', desc: '熊福利', options: ['好市多', '全聯', '家樂福', '熊貓外送'], answer: 1 },
+            { type: 'adjective', clue: '護國神山', desc: '晶圓', options: ['玉山', '阿里山', '台積電', '陽明山'], answer: 2 },
+            { type: 'color', clue: ['#EC008C', '#FFFFFF'], desc: '進去就會想上廁所?', options: ['芭比娃娃', '寶雅', 'Hello Kitty', '公廁'], answer: 1 },
+            { type: 'color', clue: ['#EE4D2D', '#FFFFFF'], desc: '橘色店到店', options: ['橘子工坊', '蝦皮', '愛馬仕', '路障'], answer: 1 },
+            { type: 'detail', clue: '🔋 交換電池', desc: '不要騎太快', options: ['特斯拉', 'Gogoro', '皮卡丘', '行動電源'], answer: 1 },
+            { type: 'detail', clue: '🟢 綠色電鍋', desc: '傳家之寶', options: ['大同', '浩克', '史瑞克', '聲寶'], answer: 0 },
+            { type: 'adjective', clue: '珍奶始祖', desc: '人文茶館', options: ['春水堂', '50嵐', '春水鎮', '茶湯會'], answer: 0 },
+            { type: 'adjective', clue: 'We are family', desc: '紅綠球 Logo', options: ['花媽', '全家', '中國信託', '玩命關頭'], answer: 2 },
+            { type: 'adjective', clue: '鍋貼', desc: '水餃', options: ['四海遊龍', '八方雲集', '九天玄女', '十全大補'], answer: 1 },
+            { type: 'adjective', clue: 'K董', desc: '精品航空', options: ['長榮', '星宇', '星際大戰', '華航'], answer: 1 },
+            { type: 'detail', clue: '🐈‍⬛ 黑貓', desc: '使命必達', options: ['魔女宅急便', '黑貓宅急便', '蝙蝠俠', '黑豹'], answer: 1 },
+            { type: 'detail', clue: '🚲 黃色微笑', desc: '公共自行車', options: ['Ubereats', 'YouBike', '香蕉', '計程車'], answer: 1 },
+            { type: 'adjective', clue: '紅黑 Logo', desc: '食品良心', options: ['義美', '義氣', '義大利', '新東陽'], answer: 0 },
+            { type: 'adjective', clue: '24H書店', desc: '文青', options: ['誠品', '良品', '極品', '贈品'], answer: 0 },
+            { type: 'detail', clue: '💳 四色標誌', desc: '嗶一下', options: ['信用卡', '悠遊卡', '健保卡', '好人卡'], answer: 1 },
+            { type: 'adjective', clue: '24h到貨', desc: '藍色紙箱', options: ['PChome', 'Yahoo', 'IKEA', '多啦A夢'], answer: 0 }
         ]
     };
 
@@ -306,7 +311,6 @@
         startScreen.classList.add('hidden');
         gameBox.classList.add('hidden');
         levelScreen.classList.remove('hidden');
-        // 重置結果頁 (如果從結果頁回來)
         document.getElementById('result-area').classList.add('hidden');
     }
 
@@ -427,10 +431,10 @@
             }
         }, 15);
 
-        if (finalScore >= 99) feedbackText.innerText = "太神啦！完全制霸！ 🎉";
+        if (finalScore >= 99) feedbackText.innerText = "太神啦！品牌大師！ 🎉";
         else if (finalScore >= 80) feedbackText.innerText = "超厲害！只差一點點！ ✨";
-        else if (finalScore >= 60) feedbackText.innerText = "及格了！繼續加油！ 👌";
-        else feedbackText.innerText = "再接再厲！下次會更好！ 💪";
+        else if (finalScore >= 60) feedbackText.innerText = "及格了！小心陷阱喔！ 👌";
+        else feedbackText.innerText = "再接再厲！陷阱有點多！ 💪";
     }
 </script>
 
