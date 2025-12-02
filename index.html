@@ -12,20 +12,23 @@
     <style>
         :root {
             /* 日系簡約配色系統 */
-            --bg-color: #f8f5e6;
-            --card-bg: #ffffff;
-            --text-main: #5c4033;
-            --text-sub: #8d7b68;
+            --bg-color: #f8f5e6;       /* 米色背景 */
+            --card-bg: #ffffff;        /* 卡片白 */
+            --text-main: #5c4033;      /* 咖啡色文字 */
+            --text-sub: #8d7b68;       /* 淺咖啡色 */
+            
+            /* 主題色 */
             --theme-orange: #f2a93b;
             --theme-shadow: #c78a2f;
             
             /* 關卡顏色 */
-            --lv1-color: #88c999; /* 綠 */
-            --lv2-color: #6C5CE7; /* 紫 */
-            --lv3-color: #FF7675; /* 紅 */
+            --lv1-color: #88c999;      /* 抹茶綠 */
+            --lv2-color: #6C5CE7;      /* 葡萄紫 */
 
+            /* 狀態色 */
             --status-green: #88c999;
             --status-red: #ff8c8c;
+            
             --border-radius: 25px;
         }
 
@@ -56,7 +59,7 @@
             padding: 30px;
             text-align: center;
             position: relative;
-            transition: all 0.3s ease;
+            transition: opacity 0.3s ease;
         }
 
         .hidden { display: none !important; }
@@ -90,7 +93,7 @@
             box-shadow: 0 0 0 var(--theme-shadow);
         }
 
-        /* === 2. 關卡選擇頁面 (新) === */
+        /* === 2. 關卡選擇頁面 === */
         .level-btn {
             display: block;
             width: 100%;
@@ -106,13 +109,13 @@
             color: white;
             font-weight: 800;
             font-size: 1.2rem;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
         }
         
         .level-btn:active { transform: translateY(5px); box-shadow: none; }
         
         .lv1 { background-color: var(--lv1-color); }
         .lv2 { background-color: var(--lv2-color); }
-        .lv3 { background-color: var(--lv3-color); }
 
         .level-icon { float: right; font-size: 1.5rem; }
         .level-desc { font-size: 0.9rem; opacity: 0.9; font-weight: normal; display: block; margin-top: 5px;}
@@ -147,8 +150,6 @@
         .clue-icon { font-size: 3rem; margin-bottom: 10px; animation: bounce 2s infinite; }
         .clue-text { font-size: 1.3rem; font-weight: 700; color: var(--text-main); line-height: 1.4; }
         .clue-desc { margin-top: 8px; font-size: 0.9rem; color: #aaa; }
-
-        /* 圖片題樣式 (給 Level 3 用) */
         .clue-img { max-width: 100%; max-height: 150px; border-radius: 10px; }
 
         .palette { display: flex; gap: 10px; }
@@ -188,6 +189,7 @@
         }
         .feedback { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
         .back-btn { background-color: #a29bfe; box-shadow: 0 6px 0 #6c5ce7; }
+        .back-btn:active { box-shadow: 0 0 0 #6c5ce7; }
 
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
         @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
@@ -208,19 +210,13 @@
         <button class="level-btn lv1" onclick="startLevel(1)">
             <span class="level-icon">🐣</span>
             LEVEL 1
-            <span class="level-desc">新手村：關鍵字 & 顏色</span>
+            <span class="level-desc">新手村：全球知名品牌 (20題)</span>
         </button>
 
         <button class="level-btn lv2" onclick="startLevel(2)">
             <span class="level-icon">🇹🇼</span>
             LEVEL 2
-            <span class="level-desc">台灣限定：在地品牌大考驗</span>
-        </button>
-
-        <button class="level-btn lv3" onclick="startLevel(3)">
-            <span class="level-icon">👁️</span>
-            LEVEL 3
-            <span class="level-desc">眼力測驗：只有一半的LOGO</span>
+            <span class="level-desc">台灣限定：在地梗大考驗 (20題)</span>
         </button>
     </div>
 
@@ -246,49 +242,51 @@
     </div>
 
 <script>
-    // === 題庫資料 (分為三個關卡) ===
+    // === 完整題庫資料 (各20題) ===
     const levelData = {
-        1: [ // LEVEL 1: 新手 (關鍵字 & 顏色)
-            { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '這個經典配色是?', options: ['麥當勞', '漢堡王', '肯德基', '摩斯'], answer: 0 },
+        1: [ // LEVEL 1: 新手村
+            { type: 'color', clue: ['#FF0000', '#FFC72C'], desc: '經典配色', options: ['麥當勞', '漢堡王', '肯德基', '摩斯'], answer: 0 },
             { type: 'adjective', clue: '科技、昂貴、極簡、缺了一口', desc: '品牌關鍵字', options: ['Microsoft', 'Samsung', 'Apple', 'Sony'], answer: 2 },
             { type: 'detail', clue: '🧜‍♀️ 雙尾美人魚', desc: '圖案細節', options: ['路易莎', '星巴克', '85度C', '伯朗咖啡'], answer: 1 },
             { type: 'color', clue: ['#0051BA', '#FFDA1A'], desc: '來自北歐的家居', options: ['Costco', 'IKEA', 'HOLA', 'NITORI'], answer: 1 },
-            { type: 'adjective', clue: '搜尋、大神、地圖', desc: '每天都會用的', options: ['Facebook', 'Google', 'Line', 'Instagram'], answer: 1 }
+            { type: 'adjective', clue: '搜尋、大神、地圖', desc: '每天都會用的', options: ['Facebook', 'Google', 'Line', 'Instagram'], answer: 1 },
+            { type: 'color', clue: ['#1877F2', '#FFFFFF'], desc: '藍底白字的社群龍頭', options: ['Twitter', 'Facebook', 'LinkedIn', 'Skype'], answer: 1 },
+            { type: 'detail', clue: '✔️ Just Do It', desc: '運動品牌', options: ['Adidas', 'Nike', 'Puma', 'Under Armour'], answer: 1 },
+            { type: 'color', clue: ['#F40009', '#FFFFFF'], desc: '紅色快樂水', options: ['百事可樂', '可口可樂', '黑松沙士', '維大力'], answer: 1 },
+            { type: 'detail', clue: '▶️ 紅色播放按鈕', desc: '看影片的地方', options: ['Netflix', 'TikTok', 'YouTube', 'Disney+'], answer: 2 },
+            { type: 'adjective', clue: '微笑箭頭、從A到Z、網購', desc: '什麼都賣', options: ['eBay', 'Amazon', 'Walmart', 'Shopee'], answer: 1 },
+            { type: 'detail', clue: '🏰 夢幻城堡 & 老鼠', desc: '童年回憶', options: ['Universal', 'DreamWorks', 'Pixar', 'Disney'], answer: 3 },
+            { type: 'color', clue: ['#3DDC84', '#FFFFFF'], desc: '綠色小機器人', options: ['Android', 'iOS', 'Windows', 'Linux'], answer: 0 },
+            { type: 'detail', clue: '🧱 丹麥積木、踩到很痛', desc: '玩具品牌', options: ['Bandai', 'Hasbro', 'LEGO', 'Mattel'], answer: 2 },
+            { type: 'color', clue: ['#ED1D24', '#FFFFFF'], desc: '紅色正方形、日本服飾', options: ['MUJI', 'Uniqlo', 'GU', 'SuperDry'], answer: 1 },
+            { type: 'detail', clue: '📺 還有個紅色的 "N"', desc: '追劇神器', options: ['HBO', 'Netflix', 'Hulu', 'AppleTV'], answer: 1 },
+            { type: 'detail', clue: '🚗 T型標誌、電動車', desc: '馬斯克', options: ['Toyota', 'Tesla', 'Ford', 'Honda'], answer: 1 },
+            { type: 'color', clue: ['#EB0028', '#F79E1B'], desc: '兩個重疊的圓圈(紅/橘)', options: ['Visa', 'Mastercard', 'JCB', 'PayPal'], answer: 1 },
+            { type: 'adjective', clue: '相機、拍立得、濾鏡', desc: '年輕人愛用', options: ['Snapchat', 'Instagram', 'Pinterest', 'Flickr'], answer: 1 },
+            { type: 'detail', clue: '🎮 △○×□', desc: '遊戲主機', options: ['Xbox', 'Nintendo', 'PlayStation', 'Steam'], answer: 2 },
+            { type: 'detail', clue: '🧔🏻‍♂️ 翹鬍子洋芋片', desc: '零食品牌', options: ['Lay\'s', 'Pringles', 'Doritos', 'Cheetos'], answer: 1 }
         ],
         2: [ // LEVEL 2: 台灣限定
             { type: 'color', clue: ['#FFF200', '#005596'], desc: '這杯手搖飲的配色 (黃/藍)', options: ['清心福全', '50嵐', '可不可', '迷客夏'], answer: 1 },
             { type: 'adjective', clue: '小籠包、排隊、黃金18摺', desc: '台灣美食之光', options: ['四海遊龍', '八方雲集', '鼎泰豐', '點水樓'], answer: 2 },
-            { type: 'detail', clue: '🦁 Open將 (外星人)', desc: '這隻吉祥物屬於?', options: ['全家', 'OK超商', '萊爾富', '7-Eleven (統一)'], answer: 3 },
+            { type: 'detail', clue: '🦁 Open將 (外星人)', desc: '這隻吉祥物屬於?', options: ['全家', 'OK超商', '萊爾富', '7-Eleven'], answer: 3 },
             { type: 'adjective', clue: '良心、小泡芙、牛奶糖', desc: '從小吃到大的食品廠', options: ['義美', '味全', '光泉', '統一'], answer: 0 },
-            { type: 'color', clue: ['#F39800', '#E60012'], desc: '藥妝店的配色 (橘/紅)', options: ['屈臣氏', '寶雅', '康是美', '日藥本舖'], answer: 2 }
-        ],
-        3: [ // LEVEL 3: 遮住一半 (這裡暫時用文字描述，您可以換成圖片)
-            { 
-                type: 'detail', 
-                // 若要換圖片，改成: clue: '<img src="nike_half.jpg" class="clue-img">',
-                clue: '✔️ (只看到勾勾)', 
-                desc: '運動品牌', options: ['Adidas', 'Nike', 'Puma', 'Reebok'], answer: 1 
-            },
-            { 
-                type: 'detail', 
-                clue: '⭕⭕⭕⭕ (四個圈圈)', 
-                desc: '德國汽車', options: ['BMW', 'Benz', 'Audi', 'Volkswagen'], answer: 2 
-            },
-            { 
-                type: 'detail', 
-                clue: '🐧 (紅色圍巾的企鵝)', 
-                desc: '社交軟體', options: ['Line', 'WeChat', 'QQ', 'Skype'], answer: 2 
-            },
-            { 
-                type: 'detail', 
-                clue: '📸 (彩虹拍立得相機)', 
-                desc: '社群平台', options: ['Snapchat', 'Tiktok', 'Instagram', 'Facebook'], answer: 2 
-            },
-             { 
-                type: 'detail', 
-                clue: '🐼 (黑白熊貓頭)', 
-                desc: '肚子餓會叫他', options: ['UberEats', 'Lalamove', 'Foodpanda', 'Shopee'], answer: 2 
-            }
+            { type: 'color', clue: ['#F39800', '#E60012'], desc: '藥妝店的配色 (橘/紅)', options: ['屈臣氏', '寶雅', '康是美', '日藥本舖'], answer: 2 },
+            { type: 'adjective', clue: '福利熊、熊福利', desc: '請支援收銀', options: ['家樂福', '大潤發', '愛買', '全聯'], answer: 3 },
+            { type: 'color', clue: ['#008852', '#FFFFFF'], desc: '機器運轉順暢必備', options: ['乖乖', '孔雀香酥脆', '可樂果', '科學麵'], answer: 0 },
+            { type: 'detail', clue: '🔥 火炬 (紅白藍)', desc: '加油要加這一家', options: ['台塑化', '台灣中油', '全國加油站', '台亞'], answer: 1 },
+            { type: 'color', clue: ['#EE4D2D', '#FFFFFF'], desc: '橘色購物袋', options: ['PChome', 'Momo', '蝦皮 (Shopee)', 'Yahoo'], answer: 2 },
+            { type: 'adjective', clue: 'We are family', desc: '銀行Slogan', options: ['國泰世華', '富邦金控', '台新銀行', '中國信託'], answer: 3 },
+            { type: 'detail', clue: '👶🏻 大寶寶、電鍋', desc: '超復古家電品牌', options: ['聲寶', '大同', '東元', '歌林'], answer: 1 },
+            { type: 'color', clue: ['#EC008C', '#FFFFFF'], desc: '粉紅色的生活百貨', options: ['寶雅', '美華泰', '四季', '光南'], answer: 0 },
+            { type: 'detail', clue: '🐦 紅色鴿子', desc: '負責送信的', options: ['黑貓宅急便', '順豐', '中華郵政', '新竹物流'], answer: 2 },
+            { type: 'detail', clue: '🐈‍⬛ 黑貓叼著小貓', desc: '宅配公司', options: ['宅配通', '黑貓宅急便', '嘉里大榮', 'Lalamove'], answer: 1 },
+            { type: 'adjective', clue: '不用換電池、安靜', desc: '台灣電動機車', options: ['Kymco', 'Yamaha', 'Gogoro', 'Sym'], answer: 2 },
+            { type: 'color', clue: ['#00A0E9', '#FFFFFF'], desc: '大學生都用的論壇 (藍色)', options: ['PTT', 'Dcard', 'Mobile01', '巴哈姆特'], answer: 1 },
+            { type: 'detail', clue: '🍵 綠色招牌、咖啡、輕食', desc: '台灣本土咖啡龍頭', options: ['Cama', '85度C', '路易莎 (Louisa)', '星巴克'], answer: 2 },
+            { type: 'adjective', clue: '頂級超市、很貴、進口貨', desc: '貴婦逛的', options: ['Mia C\'bon', '全聯', '美廉社', '小北百貨'], answer: 0 },
+            { type: 'color', clue: ['#E60012', '#FFFFFF'], desc: '這家百貨公司也是紅色的', options: ['SOGO', '新光三越', '遠東百貨', '微風'], answer: 1 },
+            { type: 'detail', clue: '🚄 橘色與白色流線', desc: '台灣西部最重要的交通', options: ['台鐵', '捷運', '台灣高鐵', '客運'], answer: 2 }
         ]
     };
 
@@ -297,6 +295,7 @@
     let currentQuestionIndex = 0;
     let score = 0;
     let canAnswer = true;
+    let pointsPerQuestion = 0;
 
     // === 頁面切換邏輯 ===
     const startScreen = document.getElementById('start-screen');
@@ -307,17 +306,18 @@
         startScreen.classList.add('hidden');
         gameBox.classList.add('hidden');
         levelScreen.classList.remove('hidden');
+        // 重置結果頁 (如果從結果頁回來)
+        document.getElementById('result-area').classList.add('hidden');
     }
 
     function startLevel(level) {
         levelScreen.classList.add('hidden');
         gameBox.classList.remove('hidden');
         
-        // 設定該關卡的題目
         currentQuestions = levelData[level];
+        pointsPerQuestion = 100 / currentQuestions.length;
         
-        // 設定標題
-        const titles = {1: 'Lv1. 新手村', 2: 'Lv2. 台灣限定', 3: 'Lv3. 眼力測驗'};
+        const titles = {1: 'Lv1. 新手村', 2: 'Lv2. 台灣限定'};
         document.getElementById('level-title').innerText = titles[level];
 
         initGame();
@@ -344,7 +344,6 @@
         const clueBox = document.getElementById('clue-display');
         clueBox.innerHTML = '';
 
-        // 根據類型渲染
         if (q.type === 'color') {
             const paletteDiv = document.createElement('div');
             paletteDiv.className = 'palette';
@@ -357,11 +356,9 @@
             clueBox.appendChild(paletteDiv);
             clueBox.innerHTML += `<p class="clue-desc">${q.desc}</p>`;
         } else {
-            // 判斷 clue 是否包含 '<img' 標籤，如果有就直接渲染 HTML
             if(q.clue.includes('<img')) {
                 clueBox.innerHTML = q.clue;
             } else {
-                // 純文字/emoji 模式
                 let icon = q.type === 'detail' ? '🔍' : '✨';
                 clueBox.innerHTML = `
                     <div class="clue-icon">${icon}</div>
@@ -371,7 +368,6 @@
             clueBox.innerHTML += `<p class="clue-desc">[${q.desc}]</p>`;
         }
 
-        // 渲染選項
         const optionsContainer = document.getElementById('options-container');
         optionsContainer.innerHTML = '';
         q.options.forEach((opt, index) => {
@@ -392,7 +388,7 @@
 
         if (selectedIndex === correctIndex) {
             btnElement.classList.add('correct');
-            score += 20;
+            score += pointsPerQuestion;
         } else {
             btnElement.classList.add('wrong');
             allButtons[correctIndex].classList.add('correct');
@@ -416,21 +412,24 @@
         const finalScoreSpan = document.getElementById('final-score');
         const feedbackText = document.getElementById('feedback-text');
         
+        let finalScore = Math.round(score);
+        if(finalScore > 100) finalScore = 100;
+
         let tempScore = 0;
         const timer = setInterval(() => {
-            if (tempScore >= score) {
+            if (tempScore >= finalScore) {
                 clearInterval(timer);
-                finalScoreSpan.innerText = score;
+                finalScoreSpan.innerText = finalScore;
             } else {
                 tempScore += 2;
-                if(tempScore > score) tempScore = score;
+                if(tempScore > finalScore) tempScore = finalScore;
                 finalScoreSpan.innerText = tempScore;
             }
         }, 15);
 
-        if (score === 100) feedbackText.innerText = "太神啦！完全制霸！ 🎉";
-        else if (score >= 80) feedbackText.innerText = "超厲害！只差一點點！ ✨";
-        else if (score >= 60) feedbackText.innerText = "及格了！繼續加油！ 👌";
+        if (finalScore >= 99) feedbackText.innerText = "太神啦！完全制霸！ 🎉";
+        else if (finalScore >= 80) feedbackText.innerText = "超厲害！只差一點點！ ✨";
+        else if (finalScore >= 60) feedbackText.innerText = "及格了！繼續加油！ 👌";
         else feedbackText.innerText = "再接再厲！下次會更好！ 💪";
     }
 </script>
